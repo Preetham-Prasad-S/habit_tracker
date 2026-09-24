@@ -131,25 +131,12 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(height: 80),
+                      const SizedBox(height: 180),
                     ],
                   ),
                 ),
               ),
             ],
-          ),
-        ),
-      ),
-      floatingActionButton: Padding(
-        padding: const EdgeInsets.only(bottom: 80.0),
-        child: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: AppColors.primaryColor,
-          shape: CircleBorder(),
-          child: Icon(
-            Ionicons.add,
-            fontWeight: FontWeight.w900,
-            color: AppColors.whiteColor,
           ),
         ),
       ),

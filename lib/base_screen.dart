@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ionicons/ionicons.dart';
+import 'package:schedule_tracker/core/utils/app_colors.dart';
+import 'package:schedule_tracker/features/home/presentation/screens/home_screen.dart';
 
 class BaseScreen extends StatelessWidget {
   const BaseScreen({super.key});
@@ -8,7 +10,32 @@ class BaseScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color.fromARGB(255, 255, 249, 249),
-      body: Column(children: [IndexedStack()]),
+      body: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          IndexedStack(index: 0, children: [HomeScreen()]),
+          SizedBox(
+            height: 125,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+              child: BottomNavigationBarWidget(),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.only(bottom: 80.0),
+        child: FloatingActionButton(
+          onPressed: () {},
+          backgroundColor: AppColors.primaryColor,
+          shape: CircleBorder(),
+          child: Icon(
+            Ionicons.add,
+            fontWeight: FontWeight.w900,
+            color: AppColors.whiteColor,
+          ),
+        ),
+      ),
     );
   }
 }

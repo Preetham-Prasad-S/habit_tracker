@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:schedule_tracker/base_screen.dart';
 import 'package:schedule_tracker/features/home/presentation/screens/home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
       }
       Navigator.of(
         context,
-      ).pushReplacement(MaterialPageRoute(builder: (context) => HomeScreen()));
+      ).pushReplacement(MaterialPageRoute(builder: (context) => BaseScreen()));
     });
   }
 
