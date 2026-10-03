@@ -18,7 +18,7 @@ class HomeDateWidget extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: Text(
-              "$date",
+              date > 10 ? "$date" : "0$date",
               style: TextStyle(
                 fontWeight: FontWeight.bold,
                 color: Colors.white,

@@ -13,10 +13,15 @@ class _TestScreenState extends State<TestScreen> {
     final databasePath = await getDatabasesPath();
     final database = await openDatabase("test.db");
 
-    
+    // database.execute("CREATE TABLE test(value INT)");
 
-    print(databasePath);
-    print(database);
+    database.insert('test', {"value": 30});
+
+    final data = await database.query('test');
+
+    // final text = await database.query("sqlite_master");
+
+    print(data);
   }
 
   @override
@@ -24,7 +29,9 @@ class _TestScreenState extends State<TestScreen> {
     return Scaffold(
       body: Center(
         child: ElevatedButton(
-          onPressed: () => databaseFunction(),
+          onPressed: () async {
+            databaseFunction();
+          },
           child: Text('Press Me', style: TextStyle(color: Colors.black)),
         ),
       ),

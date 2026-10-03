@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
 import 'package:schedule_tracker/features/home/presentation/screens/home_screen.dart';
+import 'package:schedule_tracker/habit_form_screen.dart';
 
 class BaseScreen extends StatelessWidget {
-  const BaseScreen({super.key});
+  BaseScreen({super.key});
+
+  final RxInt selectedPage = 0.obs;
 
   @override
   Widget build(BuildContext context) {
@@ -13,12 +17,17 @@ class BaseScreen extends StatelessWidget {
       body: Stack(
         alignment: Alignment.bottomCenter,
         children: [
-          IndexedStack(index: 0, children: [HomeScreen()]),
+          Obx(
+            () => IndexedStack(
+              index: selectedPage.value,
+              children: [HomeScreen(), HabitFormScreen()],
+            ),
+          ),
           SizedBox(
             height: 125,
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-              child: BottomNavigationBarWidget(),
+              child: BottomNavigationBarWidget(selectedIndex: selectedPage),
             ),
           ),
         ],
@@ -26,7 +35,9 @@ class BaseScreen extends StatelessWidget {
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(bottom: 80.0),
         child: FloatingActionButton(
-          onPressed: () {},
+          onPressed: () => Navigator.of(
+            context,
+          ).push(MaterialPageRoute(builder: (context) => HabitFormScreen())),
           backgroundColor: AppColors.primaryColor,
           shape: CircleBorder(),
           child: Icon(
@@ -41,7 +52,8 @@ class BaseScreen extends StatelessWidget {
 }
 
 class BottomNavigationBarWidget extends StatelessWidget {
-  const BottomNavigationBarWidget({super.key});
+  final RxInt selectedIndex;
+  const BottomNavigationBarWidget({super.key, required this.selectedIndex});
 
   @override
   Widget build(BuildContext context) {
@@ -56,30 +68,36 @@ class BottomNavigationBarWidget extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 10),
       child: Padding(
         padding: const EdgeInsets.all(10.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: [
-            BottomNavigationButtonWidget(
-              isSelected: true,
-              text: "Home",
-              icon: Ionicons.home_outline,
-            ),
-            BottomNavigationButtonWidget(
-              isSelected: false,
-              text: "Habits",
-              icon: Ionicons.checkmark_circle_outline,
-            ),
-            BottomNavigationButtonWidget(
-              isSelected: false,
-              text: "Stats",
-              icon: Ionicons.stats_chart_outline,
-            ),
-            BottomNavigationButtonWidget(
-              isSelected: false,
-              text: "Settings",
-              icon: Ionicons.settings_outline,
-            ),
-          ],
+        child: Obx(
+          () => Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              BottomNavigationButtonWidget(
+                isSelected: selectedIndex.value == 0,
+                text: "Home",
+                icon: Ionicons.home_outline,
+                onPressed: () => selectedIndex.value = 0,
+              ),
+              BottomNavigationButtonWidget(
+                isSelected: selectedIndex.value == 1,
+                text: "Habits",
+                icon: Ionicons.checkmark_circle_outline,
+                onPressed: () => selectedIndex.value = 1,
+              ),
+              BottomNavigationButtonWidget(
+                isSelected: selectedIndex.value == 2,
+                text: "Stats",
+                icon: Ionicons.stats_chart_outline,
+                onPressed: () => selectedIndex.value = 2,
+              ),
+              BottomNavigationButtonWidget(
+                isSelected: selectedIndex.value == 3,
+                text: "Settings",
+                icon: Ionicons.settings_outline,
+                onPressed: () => selectedIndex.value = 3,
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -90,11 +108,13 @@ class BottomNavigationButtonWidget extends StatefulWidget {
   final bool isSelected;
   final IconData icon;
   final String text;
+  final VoidCallback onPressed;
   const BottomNavigationButtonWidget({
     super.key,
     required this.isSelected,
     required this.icon,
     required this.text,
+    required this.onPressed,
   });
 
   @override
@@ -123,7 +143,7 @@ class _BottomNavigationButtonWidgetState
           widget.isSelected ? Color(0xFFFF6B4A) : Colors.white,
         ),
       ),
-      onPressed: () => setState(() {}),
+      onPressed: () => widget.onPressed(),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 5),
         child: Column(

@@ -1,22 +1,22 @@
 import 'dart:convert';
 
 abstract interface class HabitDatasource {
-  List<Habit> getHabits();
+  List<void> getHabits();
 }
 
-class Habit {
+class HabitModel {
   final String id;
   final String habitTitle;
   final String habitSubTitle;
 
-  Habit({
+  HabitModel({
     required this.id,
     required this.habitTitle,
     required this.habitSubTitle,
   });
 
-  Habit copyWith({String? id, String? habitTitle, String? habitSubTitle}) {
-    return Habit(
+  HabitModel copyWith({String? id, String? habitTitle, String? habitSubTitle}) {
+    return HabitModel(
       id: id ?? this.id,
       habitTitle: habitTitle ?? this.habitTitle,
       habitSubTitle: habitSubTitle ?? this.habitSubTitle,
@@ -27,8 +27,8 @@ class Habit {
     return {'id': id, 'habitTitle': habitTitle, 'habitSubTitle': habitSubTitle};
   }
 
-  factory Habit.fromMap(Map<String, dynamic> map) {
-    return Habit(
+  factory HabitModel.fromMap(Map<String, dynamic> map) {
+    return HabitModel(
       id: map['id'] ?? '',
       habitTitle: map['habitTitle'] ?? '',
       habitSubTitle: map['habitSubTitle'] ?? '',
@@ -37,7 +37,8 @@ class Habit {
 
   String toJson() => json.encode(toMap());
 
-  factory Habit.fromJson(String source) => Habit.fromMap(json.decode(source));
+  factory HabitModel.fromJson(String source) =>
+      HabitModel.fromMap(json.decode(source));
 
   @override
   String toString() =>
