@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
 
@@ -23,7 +24,9 @@ class HabitFormScreen extends StatelessWidget {
                       const HabitNameWidget(),
                       const SizedBox(height: 20),
                       const HabitColorIconWidget(),
-                      FrequencyWidget(),
+                      const SizedBox(height: 20),
+
+                      const FrequencyWidget(),
                     ],
                   ),
                 ),
@@ -36,14 +39,109 @@ class HabitFormScreen extends StatelessWidget {
   }
 }
 
-class FrequencyWidget extends StatelessWidget {
-  const FrequencyWidget({
-    super.key,
-  });
+class FrequencyWidget extends StatefulWidget {
+  const FrequencyWidget({super.key});
+
+  @override
+  State<FrequencyWidget> createState() => _FrequencyWidgetState();
+}
+
+class _FrequencyWidgetState extends State<FrequencyWidget> {
+  int selectedIndex = 0;
+
+  final List<String> selectedDays = const ["S", "S", "M", "T", "W", "T", "F"];
+
+  final List<String> frequencyTypes = const ["Daily", "Weekly", "Custom"];
 
   @override
   Widget build(BuildContext context) {
-    return const Column();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitleTextWidget(text: "FREQUENCY"),
+        Card(
+          shadowColor: AppColors.cardShadowColor,
+          color: AppColors.whiteColor,
+
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            side: BorderSide(color: AppColors.cardBorderColor),
+          ),
+          elevation: 10,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Card(
+                color: AppColors.greyBackdropColorLight,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(20)),
+                ),
+                elevation: 0,
+                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 5,
+                    horizontal: 5,
+                  ),
+                  child: Row(
+                    children: List.generate(
+                      frequencyTypes.length,
+                      (index) => Expanded(
+                        child: GestureDetector(
+                          onTap: () => setState(() {
+                            selectedIndex = index;
+                          }),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: selectedIndex == index
+                                  ? AppColors.primaryColor
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(20),
+                              ),
+                            ),
+                            height: 40,
+
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                frequencyTypes[index],
+                                style: TextStyle(
+                                  color: selectedIndex == index
+                                      ? AppColors.whiteColor
+                                      : AppColors.greyBackdropColorDark,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
+              const Text("Only on these days"),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                  selectedDays.length,
+                  (index) => Container(
+                    height: 25,
+                    width: 25,
+                    decoration: ShapeDecoration(
+                      shape: CircleBorder(),
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
   }
 }
 
@@ -64,13 +162,7 @@ class HabitColorIconWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(
-            "CHOOSE COLOR & ICON",
-            style: TextStyle(color: AppColors.greyBackdropColorDark),
-          ),
-        ),
+        const SectionTitleTextWidget(text: 'CHOOSE COLOR & ICON'),
         const SizedBox(height: 5),
         Card(
           shadowColor: AppColors.cardShadowColor,
@@ -125,6 +217,22 @@ class HabitColorIconWidget extends StatelessWidget {
   }
 }
 
+class SectionTitleTextWidget extends StatelessWidget {
+  final String text;
+  const SectionTitleTextWidget({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(left: 8.0),
+      child: Text(
+        text,
+        style: TextStyle(color: AppColors.greyBackdropColorDark),
+      ),
+    );
+  }
+}
+
 class HabitNameWidget extends StatelessWidget {
   const HabitNameWidget({super.key});
 
@@ -140,13 +248,7 @@ class HabitNameWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Padding(
-          padding: const EdgeInsets.only(left: 8.0),
-          child: Text(
-            "HABIT NAME",
-            style: TextStyle(color: AppColors.greyBackdropColorDark),
-          ),
-        ),
+        SectionTitleTextWidget(text: "HABIT NAME"),
         const SizedBox(height: 5),
         Card(
           elevation: 10,
@@ -196,6 +298,63 @@ class HeaderWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class PeriodSelector extends StatefulWidget {
+  const PeriodSelector({super.key});
+
+  @override
+  State<PeriodSelector> createState() => _PeriodSelectorState();
+}
+
+class _PeriodSelectorState extends State<PeriodSelector> {
+  final List<String> periods = ['Daily', 'Weekly'];
+
+  int selectedIndex = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 40,
+      padding: const EdgeInsets.all(4),
+      decoration: BoxDecoration(
+        color: const Color(0xFFF5F1F6),
+        borderRadius: BorderRadius.circular(30),
+      ),
+      child: Row(
+        children: List.generate(periods.length, (index) {
+          final isSelected = selectedIndex == index;
+
+          return Expanded(
+            child: GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedIndex = index;
+                });
+              },
+              child: Container(
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: isSelected
+                      ? const Color(0xFFFF684A)
+                      : Colors.transparent,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Text(
+                  periods[index],
+                  style: TextStyle(
+                    color: isSelected ? Colors.white : const Color(0xFF352B35),
+                    fontSize: 14,
+                    fontWeight: isSelected ? FontWeight.w600 : FontWeight.w500,
+                  ),
+                ),
+              ),
+            ),
+          );
+        }),
+      ),
     );
   }
 }

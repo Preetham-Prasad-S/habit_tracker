@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:schedule_tracker/base_screen.dart';
 import 'package:schedule_tracker/core/services/app_database.dart';
+import 'package:schedule_tracker/habit_form_screen.dart';
 import 'package:schedule_tracker/splash_screen.dart';
 
 Future<void> main() async {
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      home: SplashScreen(),
+      home: BaseScreen(),
       theme: ThemeData(textTheme: GoogleFonts.outfitTextTheme()),
     );
   }

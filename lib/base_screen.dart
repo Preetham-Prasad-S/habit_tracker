@@ -20,7 +20,7 @@ class BaseScreen extends StatelessWidget {
           Obx(
             () => IndexedStack(
               index: selectedPage.value,
-              children: [HomeScreen(), HabitFormScreen()],
+              children: [HomeScreen()],
             ),
           ),
           SizedBox(
