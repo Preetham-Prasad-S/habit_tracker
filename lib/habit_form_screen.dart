@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
 
@@ -25,8 +24,9 @@ class HabitFormScreen extends StatelessWidget {
                       const SizedBox(height: 20),
                       const HabitColorIconWidget(),
                       const SizedBox(height: 20),
-
                       const FrequencyWidget(),
+                      const SizedBox(height: 20),
+                      const ReminderWidget(),
                     ],
                   ),
                 ),
@@ -35,6 +35,84 @@ class HabitFormScreen extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class ReminderWidget extends StatefulWidget {
+  const ReminderWidget({super.key});
+
+  @override
+  State<ReminderWidget> createState() => _ReminderWidgetState();
+}
+
+class _ReminderWidgetState extends State<ReminderWidget> {
+  bool _swtichStatus = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SectionTitleTextWidget(text: "DAILY REMINDER OPTIONAL"),
+        const SizedBox(height: 10),
+        Card(
+          color: AppColors.whiteColor,
+          elevation: 10,
+          shadowColor: AppColors.cardShadowColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20)),
+            side: BorderSide(color: AppColors.cardBorderColor),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Row(
+              children: [
+                Card(
+                  elevation: 0,
+                  color: AppColors.primaryBackdropColor,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10),
+                    child: Icon(
+                      Ionicons.alarm,
+                      color: AppColors.primaryColor,
+                      size: 30,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text("08:30 AM", style: TextStyle(fontSize: 20)),
+                    Text(
+                      "Reminder Alarm",
+                      style: TextStyle(color: AppColors.greyBackdropColorDark),
+                    ),
+                  ],
+                ),
+                const Spacer(),
+                Switch(
+                  activeThumbColor: AppColors.primaryColor,
+                  thumbColor: WidgetStatePropertyAll(AppColors.whiteColor),
+                  activeTrackColor: AppColors.primaryColor,
+
+                  trackOutlineWidth: WidgetStatePropertyAll(1),
+                  trackOutlineColor: WidgetStatePropertyAll(
+                    AppColors.transperantColor,
+                  ),
+                  value: _swtichStatus,
+                  onChanged: (value) {
+                    setState(() {
+                      _swtichStatus = !_swtichStatus;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -68,48 +146,51 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
             side: BorderSide(color: AppColors.cardBorderColor),
           ),
           elevation: 10,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Card(
-                color: AppColors.greyBackdropColorLight,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20)),
-                ),
-                elevation: 0,
-                margin: EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 5,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Card(
+                  color: AppColors.greyBackdropColorLight,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(20)),
                   ),
-                  child: Row(
-                    children: List.generate(
-                      frequencyTypes.length,
-                      (index) => Expanded(
-                        child: GestureDetector(
-                          onTap: () => setState(() {
-                            selectedIndex = index;
-                          }),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: selectedIndex == index
-                                  ? AppColors.primaryColor
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(20),
+                  elevation: 0,
+                  margin: EdgeInsets.symmetric(vertical: 20, horizontal: 0),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 5,
+                      horizontal: 5,
+                    ),
+                    child: Row(
+                      children: List.generate(
+                        frequencyTypes.length,
+                        (index) => Expanded(
+                          child: GestureDetector(
+                            onTap: () => setState(() {
+                              selectedIndex = index;
+                            }),
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: selectedIndex == index
+                                    ? AppColors.primaryColor
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
                               ),
-                            ),
-                            height: 40,
+                              height: 40,
 
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: Text(
-                                frequencyTypes[index],
-                                style: TextStyle(
-                                  color: selectedIndex == index
-                                      ? AppColors.whiteColor
-                                      : AppColors.greyBackdropColorDark,
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  frequencyTypes[index],
+                                  style: TextStyle(
+                                    color: selectedIndex == index
+                                        ? AppColors.whiteColor
+                                        : AppColors.greyBackdropColorDark,
+                                  ),
                                 ),
                               ),
                             ),
@@ -119,25 +200,31 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
                     ),
                   ),
                 ),
-              ),
 
-              const Text("Only on these days"),
-
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: List.generate(
-                  selectedDays.length,
-                  (index) => Container(
-                    height: 25,
-                    width: 25,
-                    decoration: ShapeDecoration(
-                      shape: CircleBorder(),
-                      color: Colors.black,
+                const Text("Only on these days"),
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: List.generate(
+                    selectedDays.length,
+                    (index) => Container(
+                      width: 40,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: AppColors.primaryColor,
+                      ),
+                      alignment: Alignment.center,
+                      child: Text(
+                        selectedDays[index],
+                        style: TextStyle(color: AppColors.whiteColor),
+                      ),
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+              ],
+            ),
           ),
         ),
       ],
