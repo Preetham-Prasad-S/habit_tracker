@@ -3,7 +3,7 @@ import 'package:get/state_manager.dart';
 import 'package:ionicons/ionicons.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
 import 'package:schedule_tracker/features/home/presentation/screens/home_screen.dart';
-import 'package:schedule_tracker/habit_form_screen.dart';
+import 'package:schedule_tracker/features/habit/presentation/screens/habit_form_screen.dart';
 
 class BaseScreen extends StatelessWidget {
   BaseScreen({super.key});
