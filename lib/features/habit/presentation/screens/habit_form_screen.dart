@@ -33,7 +33,21 @@ class HabitFormScreen extends StatelessWidget {
                             habitFormController.habitNameController,
                       ),
                       const SizedBox(height: 20),
-                      const HabitColorIconWidget(),
+                      Obx(
+                        () => HabitColorIconWidget(
+                          habitColors: habitFormController.habitColors,
+                          onTapColor: (index) {
+                            habitFormController.selectedColor.value = index;
+                          },
+                          onTapIcon: (index) {
+                            habitFormController.selectedIcon.value = index;
+                          },
+                          selectedColor:
+                              habitFormController.selectedColor.value,
+                          selectedIcon: habitFormController.selectedIcon.value,
+                          habitIcons: habitFormController.habitIcons,
+                        ),
+                      ),
                       const SizedBox(height: 20),
                       const FrequencyWidget(),
                       const SizedBox(height: 20),

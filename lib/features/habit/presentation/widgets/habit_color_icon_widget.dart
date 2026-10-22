@@ -4,24 +4,27 @@ import 'package:schedule_tracker/core/utils/app_colors.dart';
 import 'package:schedule_tracker/features/habit/presentation/widgets/section_title_widget.dart';
 
 class HabitColorIconWidget extends StatefulWidget {
-  const HabitColorIconWidget({super.key});
+  const HabitColorIconWidget({
+    super.key,
+    required this.habitColors,
+    required this.onTapColor,
+    required this.selectedColor,
+    required this.habitIcons,
+    required this.selectedIcon,
+    required this.onTapIcon,
+  });
+  final Map<int, Color> habitColors;
+  final Map<int, IconData> habitIcons;
+  final Function(int index) onTapColor;
+  final Function(int index) onTapIcon;
+  final int selectedColor;
+  final int selectedIcon;
 
   @override
   State<HabitColorIconWidget> createState() => _HabitColorIconWidgetState();
 }
 
 class _HabitColorIconWidgetState extends State<HabitColorIconWidget> {
-  int _selectedColor = 0;
-
-  final List<Color> _habitColors = const [
-    Colors.blue,
-    Colors.green,
-    Colors.red,
-    Colors.pink,
-    Colors.purple,
-    Colors.orange,
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -46,15 +49,13 @@ class _HabitColorIconWidgetState extends State<HabitColorIconWidget> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   spacing: 10,
                   children: List.generate(
-                    _habitColors.length,
+                    widget.habitColors.length,
                     (index) => GestureDetector(
-                      onTap: () => setState(() {
-                        _selectedColor = index;
-                      }),
+                      onTap: () => widget.onTapColor(index),
                       child: Card(
                         elevation: 0,
                         color: AppColors.whiteColor,
-                        shape: _selectedColor == index
+                        shape: widget.selectedColor == index
                             ? CircleBorder(
                                 side: BorderSide(
                                   color: AppColors.primaryColor,
@@ -70,9 +71,9 @@ class _HabitColorIconWidgetState extends State<HabitColorIconWidget> {
                             width: 35,
                             decoration: ShapeDecoration(
                               shape: CircleBorder(),
-                              color: _habitColors[index],
+                              color: widget.habitColors[index],
                             ),
-                            child: _selectedColor == index
+                            child: widget.selectedColor == index
                                 ? Icon(
                                     Ionicons.checkmark_outline,
                                     color: AppColors.whiteColor,
@@ -94,10 +95,31 @@ class _HabitColorIconWidgetState extends State<HabitColorIconWidget> {
                     crossAxisCount: 6,
                   ),
                   itemCount: 12,
-                  itemBuilder: (context, index) => Card(
-                    elevation: 0,
-                    color: AppColors.greyBackdropColorLight,
-                    child: Icon(Ionicons.code_working),
+                  itemBuilder: (context, index) => GestureDetector(
+                    onTap: () => widget.onTapIcon(index),
+                    child: Card(
+                      shape: widget.selectedIcon == index
+                          ? RoundedRectangleBorder(
+                              borderRadius: BorderRadius.all(
+                                Radius.circular(10),
+                              ),
+                              side: BorderSide(
+                                color: AppColors.primaryColor,
+                                width: 2.5,
+                              ),
+                            )
+                          : null,
+                      elevation: 0,
+                      color: widget.selectedIcon == index
+                          ? AppColors.primaryBackdropColor
+                          : AppColors.greyBackdropColorLight,
+                      child: Icon(
+                        widget.habitIcons[index],
+                        color: widget.selectedIcon == index
+                            ? AppColors.primaryColor
+                            : AppColors.greyBackdropColorDark,
+                      ),
+                    ),
                   ),
                 ),
               ],

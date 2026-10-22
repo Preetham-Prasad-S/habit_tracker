@@ -4,8 +4,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:schedule_tracker/base_screen.dart';
 import 'package:schedule_tracker/core/services/app_database.dart';
-import 'package:schedule_tracker/features/habit/presentation/screens/habit_form_screen.dart';
-import 'package:schedule_tracker/splash_screen.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -28,7 +26,6 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-      
       debugShowCheckedModeBanner: false,
       home: BaseScreen(),
       theme: ThemeData(textTheme: GoogleFonts.outfitTextTheme()),
