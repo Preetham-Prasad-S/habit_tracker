@@ -10,11 +10,13 @@ class FrequencyWidget extends StatefulWidget {
 }
 
 class _FrequencyWidgetState extends State<FrequencyWidget> {
-  int selectedIndex = 0;
+  int selectedType = 0;
 
-  final List<String> selectedDays = const ["S", "S", "M", "T", "W", "T", "F"];
+  List<int> selectedDays = [];
 
-  final List<String> frequencyTypes = const ["Daily", "Weekly", "Custom"];
+  final List<String> availableDays = const ["S", "S", "M", "T", "W", "T", "F"];
+
+  final List<String> frequencyTypes = const ["Daily", "Weekly"];
 
   @override
   Widget build(BuildContext context) {
@@ -54,11 +56,14 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
                         (index) => Expanded(
                           child: GestureDetector(
                             onTap: () => setState(() {
-                              selectedIndex = index;
+                              selectedType = index;
+                              if (selectedType == 0) {
+                                selectedDays.clear();
+                              }
                             }),
                             child: Container(
                               decoration: BoxDecoration(
-                                color: selectedIndex == index
+                                color: selectedType == index
                                     ? AppColors.primaryColor
                                     : Colors.transparent,
                                 borderRadius: BorderRadius.all(
@@ -72,7 +77,7 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
                                 child: Text(
                                   frequencyTypes[index],
                                   style: TextStyle(
-                                    color: selectedIndex == index
+                                    color: selectedType == index
                                         ? AppColors.whiteColor
                                         : AppColors.greyBackdropColorDark,
                                   ),
@@ -88,24 +93,10 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
 
                 const Text("Only on these days"),
                 const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: List.generate(
-                    selectedDays.length,
-                    (index) => Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: AppColors.primaryColor,
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        selectedDays[index],
-                        style: TextStyle(color: AppColors.whiteColor),
-                      ),
-                    ),
-                  ),
+                AvailableDaysWidget(
+                  selecteDays: selectedDays,
+                  availableDays: availableDays,
+                  selectedType: selectedType,
                 ),
                 const SizedBox(height: 10),
               ],
@@ -113,6 +104,64 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
           ),
         ),
       ],
+    );
+  }
+}
+
+class AvailableDaysWidget extends StatefulWidget {
+  const AvailableDaysWidget({
+    super.key,
+    required this.availableDays,
+    required this.selectedType,
+    required this.selecteDays,
+  });
+
+  final List<int> selecteDays;
+  final List<String> availableDays;
+  final int selectedType;
+
+  @override
+  State<AvailableDaysWidget> createState() => _AvailableDaysWidgetState();
+}
+
+class _AvailableDaysWidgetState extends State<AvailableDaysWidget> {
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: List.generate(
+        widget.availableDays.length,
+        (index) => GestureDetector(
+          onTap: () {
+            setState(() {
+              if (widget.selectedType != 0) {
+                if (widget.selecteDays.contains(index)) {
+                  widget.selecteDays.remove(index);
+                } else {
+                  widget.selecteDays.add(index);
+                }
+              }
+            });
+          },
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: widget.selectedType != 0
+                  ? widget.selecteDays.contains(index)
+                        ? AppColors.primaryColor
+                        : AppColors.greyBackdropColorMedium
+                  : AppColors.primaryColor,
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              widget.availableDays[index],
+              style: TextStyle(color: AppColors.whiteColor),
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
