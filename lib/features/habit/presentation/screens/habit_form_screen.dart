@@ -22,7 +22,7 @@ class HabitFormScreen extends StatelessWidget {
           padding: EdgeInsets.symmetric(horizontal: 20),
           child: Column(
             children: [
-              const HeaderWidget(),
+              HeaderWidget(onPressed: habitFormController.createHabit),
               const SizedBox(height: 20),
               Expanded(
                 child: SingleChildScrollView(
@@ -49,7 +49,7 @@ class HabitFormScreen extends StatelessWidget {
                         ),
                       ),
                       const SizedBox(height: 20),
-                      const FrequencyWidget(),
+                      FrequencyWidget(controller: habitFormController),
                       const SizedBox(height: 20),
                       // const ReminderWidget(),
                     ],

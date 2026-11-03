@@ -24,6 +24,7 @@ class HabitNameWidget extends StatelessWidget {
           elevation: 10,
           shadowColor: AppColors.cardShadowColor,
           child: TextField(
+            controller: habitNameTextController,
             decoration: InputDecoration(
               filled: true,
               hintText: "Study, Workout, Drink Water.......",

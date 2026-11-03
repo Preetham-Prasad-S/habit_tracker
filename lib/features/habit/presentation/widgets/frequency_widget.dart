@@ -1,22 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:get/state_manager.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
+import 'package:schedule_tracker/features/habit/presentation/controller/habit_form_controller.dart';
 import 'package:schedule_tracker/features/habit/presentation/widgets/section_title_widget.dart';
 
 class FrequencyWidget extends StatefulWidget {
-  const FrequencyWidget({super.key});
+  const FrequencyWidget({super.key, required this.controller});
+
+  final HabitFormController controller;
 
   @override
   State<FrequencyWidget> createState() => _FrequencyWidgetState();
 }
 
 class _FrequencyWidgetState extends State<FrequencyWidget> {
-  int selectedType = 0;
-
-  List<int> selectedDays = [];
-
   final List<String> availableDays = const ["S", "S", "M", "T", "W", "T", "F"];
 
   final List<String> frequencyTypes = const ["Daily", "Weekly"];
+
+  void switchFrequencyType(int index) {
+    setState(() {
+      widget.controller.selectedFrequencyType.value = index;
+      if (widget.controller.selectedFrequencyType.value == 0) {
+        widget.controller.selectedFrequencyDays.clear();
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,36 +59,43 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
                       vertical: 5,
                       horizontal: 5,
                     ),
-                    child: Row(
-                      children: List.generate(
-                        frequencyTypes.length,
-                        (index) => Expanded(
-                          child: GestureDetector(
-                            onTap: () => setState(() {
-                              selectedType = index;
-                              if (selectedType == 0) {
-                                selectedDays.clear();
-                              }
-                            }),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: selectedType == index
-                                    ? AppColors.primaryColor
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(20),
+                    child: Obx(
+                      () => Row(
+                        children: List.generate(
+                          frequencyTypes.length,
+                          (index) => Expanded(
+                            child: GestureDetector(
+                              onTap: () => switchFrequencyType(index),
+                              child: Container(
+                                decoration: BoxDecoration(
+                                  color:
+                                      widget
+                                              .controller
+                                              .selectedFrequencyType
+                                              .value ==
+                                          index
+                                      ? AppColors.primaryColor
+                                      : Colors.transparent,
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(20),
+                                  ),
                                 ),
-                              ),
-                              height: 40,
+                                height: 40,
 
-                              child: Align(
-                                alignment: Alignment.center,
-                                child: Text(
-                                  frequencyTypes[index],
-                                  style: TextStyle(
-                                    color: selectedType == index
-                                        ? AppColors.whiteColor
-                                        : AppColors.greyBackdropColorDark,
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    frequencyTypes[index],
+                                    style: TextStyle(
+                                      color:
+                                          widget
+                                                  .controller
+                                                  .selectedFrequencyType
+                                                  .value ==
+                                              index
+                                          ? AppColors.whiteColor
+                                          : AppColors.greyBackdropColorDark,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -94,11 +110,11 @@ class _FrequencyWidgetState extends State<FrequencyWidget> {
                 const Text("Only on these days"),
                 const SizedBox(height: 10),
                 AvailableDaysWidget(
-                  selecteDays: selectedDays,
+                  selecteDays: widget.controller.selectedFrequencyDays,
                   availableDays: availableDays,
-                  selectedType: selectedType,
+                  selectedType: widget.controller.selectedFrequencyType.value,
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 20),
               ],
             ),
           ),

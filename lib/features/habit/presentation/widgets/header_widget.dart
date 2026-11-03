@@ -3,7 +3,8 @@ import 'package:ionicons/ionicons.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
 
 class HeaderWidget extends StatelessWidget {
-  const HeaderWidget({super.key});
+  const HeaderWidget({super.key, required this.onPressed});
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -20,7 +21,7 @@ class HeaderWidget extends StatelessWidget {
         ),
         TextButton(
           style: TextButton.styleFrom(overlayColor: AppColors.primaryColor),
-          onPressed: () {},
+          onPressed: onPressed,
           child: Text(
             "Save",
             style: TextStyle(
