@@ -2,9 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:schedule_tracker/core/utils/app_colors.dart';
 import 'package:schedule_tracker/features/habit/presentation/widgets/section_title_widget.dart';
 
-class HabitNameWidget extends StatelessWidget {
-  const HabitNameWidget({super.key, required this.habitNameTextController});
+class HabitFieldWidget extends StatelessWidget {
+  const HabitFieldWidget({
+    super.key,
+    required this.habitNameTextController,
+    required this.text,
+    required this.hintText,
+  });
   final TextEditingController habitNameTextController;
+  final String text;
+  final String hintText;
 
   OutlineInputBorder _border(Color borderColor) {
     return OutlineInputBorder(
@@ -18,7 +25,7 @@ class HabitNameWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SectionTitleTextWidget(text: "HABIT NAME"),
+        SectionTitleTextWidget(text: text),
         const SizedBox(height: 5),
         Card(
           elevation: 10,
@@ -27,7 +34,7 @@ class HabitNameWidget extends StatelessWidget {
             controller: habitNameTextController,
             decoration: InputDecoration(
               filled: true,
-              hintText: "Study, Workout, Drink Water.......",
+              hintText: hintText,
               hintStyle: TextStyle(color: AppColors.greyBackdropColorMedium),
               fillColor: AppColors.whiteColor,
               enabledBorder: _border(AppColors.cardBorderColor),

@@ -4,7 +4,7 @@ import 'package:schedule_tracker/core/utils/app_colors.dart';
 import 'package:schedule_tracker/features/habit/presentation/controller/habit_form_controller.dart';
 import 'package:schedule_tracker/features/habit/presentation/widgets/frequency_widget.dart';
 import 'package:schedule_tracker/features/habit/presentation/widgets/habit_color_icon_widget.dart';
-import 'package:schedule_tracker/features/habit/presentation/widgets/habit_name_widget.dart';
+import 'package:schedule_tracker/features/habit/presentation/widgets/habit_field_widget.dart';
 import 'package:schedule_tracker/features/habit/presentation/widgets/header_widget.dart';
 
 class HabitFormScreen extends StatelessWidget {
@@ -28,7 +28,17 @@ class HabitFormScreen extends StatelessWidget {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
-                      HabitNameWidget(
+                      HabitFieldWidget(
+                        text: "HABIT NAME",
+                        hintText: "Study, Workout, Drink Water.......",
+                        habitNameTextController:
+                            habitFormController.habitNameController,
+                      ),
+                      const SizedBox(height: 10),
+
+                      HabitFieldWidget(
+                        text: 'HABIT DESCRIPTION',
+                        hintText: "Study for half an hour......",
                         habitNameTextController:
                             habitFormController.habitNameController,
                       ),
